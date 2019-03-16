@@ -5,6 +5,14 @@ import webbrowser
 import builtins
 import sys
 import datetime
+from pathlib import Path
+import os.path
+import platform
+import os
+import stat
+
+PICOTURTLE_WEBCANVAS_RELEASES_URL = 'https://github.com/abhishekmishra/picoturtle-web-canvas/releases/download/'
+PICOTURTLE_WEBCANVAS_VERSION_TAG = 'v0.0.9'
 
 # def turtle_request(url):
 #     #TODO: Added debug/verbose param to enable request times.
@@ -16,6 +24,46 @@ import datetime
 #     #print(url + ' Took ' + str(delta))
 #     return t
 
+
+def get_picoturtle_exec_name():
+    if platform.system() == 'Linux':
+        return 'picoturtle-web-canvas-linux'
+
+
+
+def download_picoturtle_web_canvas(location=None, force=False):
+    toolbar_width = 40
+    last_bar = 0
+
+    def download_progress(blocknum, bs, size):
+        pct = (blocknum * bs)/size
+        bar = int(pct * toolbar_width)
+        #print(str(blocknum * bs) + ' of ' + str(size))
+        nonlocal last_bar
+        for i in range(last_bar, bar):
+            sys.stdout.write("-")
+            sys.stdout.flush()
+        last_bar = bar
+
+    url = PICOTURTLE_WEBCANVAS_RELEASES_URL + PICOTURTLE_WEBCANVAS_VERSION_TAG + \
+        '/' + get_picoturtle_exec_name()
+    if location == None:
+        location = os.path.join(str(Path.home()), get_picoturtle_exec_name())
+    if os.path.exists(location) and not force:
+        print('File already exists at location -> ' + location)
+    else:
+        print('Downloading ' + url + ' at -> ' + location)
+
+        # setup toolbar
+        sys.stdout.write("[%s]" % (" " * toolbar_width))
+        sys.stdout.flush()
+        # return to start of line, after '['
+        sys.stdout.write("\b" * (toolbar_width+1))
+
+        urllib.request.urlretrieve(url, location, download_progress)
+        print('Done.')
+    st = os.stat(location)
+    os.chmod(location, st.st_mode | stat.S_IEXEC)
 
 class Turtle:
     """
@@ -51,7 +99,7 @@ class Turtle:
             command = {'cmd': cmd, 'args': cargs}
             self.commands.append(command)
             if (len(self.commands) >= self.bulk_limit) or (cmd == 'stop') or (cmd == 'state'):
-                #print(self.commands)
+                # print(self.commands)
                 # drain the commands
                 req = urllib.request.Request(self.turtle_url + '/turtle/' +
                                              self.name + '/commands')
@@ -138,7 +186,8 @@ class Turtle:
         return t
 
     def goto(self, x, y):
-        t = self.turtle_request('goto', args=[{'k': 'x', 'v': x}, {'k': 'y', 'v': y}])
+        t = self.turtle_request(
+            'goto', args=[{'k': 'x', 'v': x}, {'k': 'y', 'v': y}])
         return t
 
     def setx(self, x):
@@ -280,11 +329,12 @@ def pencolour(r, g, b):
 
 
 if __name__ == "__main__":
-    t = Turtle()
-    t.penup()
-    t.pendown()
-    t.pencolour(0, 0, 255)
-    for i in range(4):
-        t.forward(50)
-        t.right(90)
-    t.stop()
+    # t = Turtle()
+    # t.penup()
+    # t.pendown()
+    # t.pencolour(0, 0, 255)
+    # for i in range(4):
+    #     t.forward(50)
+    #     t.right(90)
+    # t.stop()
+    download_picoturtle_web_canvas()
