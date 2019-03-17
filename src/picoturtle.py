@@ -25,6 +25,7 @@ PICOTURTLE_WEBCANVAS_VERSION_TAG = 'v0.0.9'
 #     #print(url + ' Took ' + str(delta))
 #     return t
 
+builtins.t = None
 
 def get_picoturtle_exec_name():
     if platform.system() == 'Linux':
