@@ -10,6 +10,7 @@ import os.path
 import platform
 import os
 import stat
+import subprocess
 
 PICOTURTLE_WEBCANVAS_RELEASES_URL = 'https://github.com/abhishekmishra/picoturtle-web-canvas/releases/download/'
 PICOTURTLE_WEBCANVAS_VERSION_TAG = 'v0.0.9'
@@ -30,6 +31,9 @@ def get_picoturtle_exec_name():
         return 'picoturtle-web-canvas-linux'
 
 
+def get_default_picoturtle_exec_path():
+    return os.path.join(str(Path.home()), get_picoturtle_exec_name())
+
 
 def download_picoturtle_web_canvas(location=None, force=False):
     toolbar_width = 40
@@ -48,7 +52,7 @@ def download_picoturtle_web_canvas(location=None, force=False):
     url = PICOTURTLE_WEBCANVAS_RELEASES_URL + PICOTURTLE_WEBCANVAS_VERSION_TAG + \
         '/' + get_picoturtle_exec_name()
     if location == None:
-        location = os.path.join(str(Path.home()), get_picoturtle_exec_name())
+        location = get_default_picoturtle_exec_path()
     if os.path.exists(location) and not force:
         print('File already exists at location -> ' + location)
     else:
@@ -65,6 +69,12 @@ def download_picoturtle_web_canvas(location=None, force=False):
     st = os.stat(location)
     os.chmod(location, st.st_mode | stat.S_IEXEC)
 
+
+def run_picoturtle_web_canvas():
+    exec_path = get_default_picoturtle_exec_path()
+    subprocess.check_call([exec_path])
+
+
 class Turtle:
     """
     proxy to turtle remote api
@@ -75,11 +85,13 @@ class Turtle:
                  host="127.0.0.1",
                  port="3000",
                  bulk=True,
-                 bulk_limit=100):
+                 bulk_limit=100,
+                 open_browser=True):
         self.turtle_url = "http://" + host + ":" + port
         self.bulk = bulk
         self.bulk_limit = bulk_limit
         self.name = name
+        self.open_browser = open_browser
         self.commands = []
         if self.name == None:
             self.turtle_init()
@@ -145,8 +157,9 @@ class Turtle:
                 'v': 250
             }])
         self.name = t['name']
-        webbrowser.open(self.turtle_url +
-                        '/index.html?details=0&list=0&name=' + self.name)
+        if self.open_browser:
+            webbrowser.open(self.turtle_url +
+                            '/index.html?details=0&list=0&name=' + self.name)
         return t
 
     def penup(self):
@@ -338,3 +351,4 @@ if __name__ == "__main__":
     #     t.right(90)
     # t.stop()
     download_picoturtle_web_canvas()
+    run_picoturtle_web_canvas()
