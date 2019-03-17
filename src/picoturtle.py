@@ -267,79 +267,79 @@ def create_turtle():
 
 
 def penup():
-    return t.penup()
+    return builtins.t.penup()
 
 
 def pendown():
-    return t.pendown()
+    return builtins.t.pendown()
 
 
 def penwidth(w):
-    return t.penwidth(w)
+    return builtins.t.penwidth(w)
 
 
 def stop():
-    return t.stop()
+    return builtins.t.stop()
 
 
 def state():
-    return t.state()
+    return builtins.t.state()
 
 
 def home():
-    return t.home()
+    return builtins.t.home()
 
 
 def clear():
-    return t.clear()
+    return builtins.t.clear()
 
 
 def forward(d):
-    return t.forward(d)
+    return builtins.t.forward(d)
 
 
 def back(d):
-    return t.back(d)
+    return builtins.t.back(d)
 
 
 def goto(x, y):
-    return t.goto(x, y)
+    return builtins.t.goto(x, y)
 
 
 def setx(x):
-    return t.setx(x)
+    return builtins.t.setx(x)
 
 
 def sety(y):
-    return t.sety(y)
+    return builtins.t.sety(y)
 
 
 def left(a):
-    return t.left(a)
+    return builtins.t.left(a)
 
 
 def right(a):
-    return t.right(a)
+    return builtins.t.right(a)
 
 
 def heading(a):
-    return t.heading(a)
+    return builtins.t.heading(a)
 
 
 def font(f):
-    return t.font(f)
+    return builtins.t.font(f)
 
 
 def filltext(text):
-    return t.filltext(text)
+    return builtins.t.filltext(text)
 
 
 def stroketext(text):
-    return t.stroketext(text)
+    return builtins.t.stroketext(text)
 
 
 def pencolour(r, g, b):
-    t.pencolour(r, g, b)
+    builtins.t.pencolour(r, g, b)
 
 
 if __name__ == "__main__":
