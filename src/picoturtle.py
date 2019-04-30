@@ -13,7 +13,7 @@ import stat
 import subprocess
 
 PICOTURTLE_WEBCANVAS_RELEASES_URL = 'https://github.com/abhishekmishra/picoturtle-web-canvas/releases/download/'
-PICOTURTLE_WEBCANVAS_VERSION_TAG = 'v0.0.9'
+PICOTURTLE_WEBCANVAS_VERSION_TAG = 'v0.0.10'
 
 # def turtle_request(url):
 #     #TODO: Added debug/verbose param to enable request times.
