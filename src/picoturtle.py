@@ -27,9 +27,14 @@ PICOTURTLE_WEBCANVAS_VERSION_TAG = 'v0.0.10'
 
 builtins.t = None
 
+
 def get_picoturtle_exec_name():
     if platform.system() == 'Linux':
         return 'picoturtle-web-canvas-linux'
+    elif platform.system() == 'Windows':
+        return 'picoturtle-web-canvas-win.exe'
+    else:
+        print(platform.system())
 
 
 def get_default_picoturtle_exec_path():
@@ -50,8 +55,9 @@ def download_picoturtle_web_canvas(location=None, force=False):
             sys.stdout.flush()
         last_bar = bar
 
-    url = PICOTURTLE_WEBCANVAS_RELEASES_URL + PICOTURTLE_WEBCANVAS_VERSION_TAG + \
-        '/' + get_picoturtle_exec_name()
+    url = PICOTURTLE_WEBCANVAS_RELEASES_URL \
+        + PICOTURTLE_WEBCANVAS_VERSION_TAG \
+        + '/' + get_picoturtle_exec_name()
     if location == None:
         location = get_default_picoturtle_exec_path()
     if os.path.exists(location) and not force:
@@ -249,6 +255,17 @@ class Turtle:
         }], True)
         return t
 
+    def export_img(self, filename):
+        t = self.turtle_request(
+            'export_img', args=[{'k': 'filename', 'v': filename}])
+        return t
+
+    def canvas_size(self, width, height):
+        t = self.turtle_request('canvas_size', args=[
+            {'k': 'width', 'v': width},
+            {'k': 'height', 'v': height}])
+        return t
+
 
 def create_turtle():
     name = None
@@ -340,6 +357,14 @@ def stroketext(text):
 
 def pencolour(r, g, b):
     builtins.t.pencolour(r, g, b)
+
+
+def export_img(filename):
+    return builtins.t.export_img(filename)
+
+
+def canvas_size(width, height):
+    return builtins.t.canvas_size(width, height)
 
 
 if __name__ == "__main__":
