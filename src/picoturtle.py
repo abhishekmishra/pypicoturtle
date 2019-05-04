@@ -33,6 +33,8 @@ def get_picoturtle_exec_name():
         return 'picoturtle-web-canvas-linux'
     elif platform.system() == 'Windows':
         return 'picoturtle-web-canvas-win.exe'
+    elif platform.system() == 'Darwin':
+        return 'picoturtle-web-canvas-macos'
     else:
         print(platform.system())
 
